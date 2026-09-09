@@ -33,7 +33,7 @@ Most planning skills and "plan first" prompts produce an optimistic bullet list.
 The open [skills](https://github.com/vercel-labs/skills) CLI installs the skill into whichever agents it detects (Claude Code, Codex, Cursor, Kilo, OpenCode, Gemini CLI, and more):
 
 ```bash
-npx skills add Xexxxed/robust-plan-skill
+npx skills add Xexxed/robust-plan-skill
 ```
 
 Useful flags: `-g` for global (user-level) install, `-a <agents...>` to target specific agents (e.g. `-a claude-code codex kilo`), `-y` to skip prompts, `--all` to install everywhere without asking.
@@ -41,7 +41,7 @@ Useful flags: `-g` for global (user-level) install, `-a <agents...>` to target s
 ### Option 2 — Claude Code plugin marketplace
 
 ```text
-/plugin marketplace add Xexxxed/robust-plan-skill
+/plugin marketplace add Xexxed/robust-plan-skill
 /plugin install robust-plan@robust-plan-skill
 ```
 
@@ -50,7 +50,7 @@ Useful flags: `-g` for global (user-level) install, `-a <agents...>` to target s
 Clone and copy the skill folder into your agent's skills directory:
 
 ```bash
-git clone https://github.com/Xexxxed/robust-plan-skill.git
+git clone https://github.com/Xexxed/robust-plan-skill.git
 mkdir -p ~/.claude/skills
 cp -r robust-plan-skill/skills/robust-plan ~/.claude/skills/
 ```
@@ -58,7 +58,7 @@ cp -r robust-plan-skill/skills/robust-plan ~/.claude/skills/
 PowerShell (Windows):
 
 ```powershell
-git clone https://github.com/Xexxxed/robust-plan-skill.git
+git clone https://github.com/Xexxed/robust-plan-skill.git
 New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
 Copy-Item -Recurse robust-plan-skill\skills\robust-plan "$HOME\.claude\skills\"
 ```
