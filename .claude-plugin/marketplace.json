@@ -1,0 +1,21 @@
+{
+  "name": "robust-plan-skill",
+  "owner": {
+    "name": "Xexxxed"
+  },
+  "metadata": {
+    "description": "Robust implementation planning skill for coding agents",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "robust-plan",
+      "description": "Design deep, evidence-based implementation and testing plans — invariants, route selection, staged rollout, acceptance criteria, fallback tables, isolated testing.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/robust-plan"
+      ]
+    }
+  ]
+}
