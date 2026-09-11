@@ -1,6 +1,6 @@
 ---
 name: robust-plan
-description: Design deep, evidence-based implementation and testing plans for complex features and fixes in the "robust plan" style — invariants, route selection, staged rollout, acceptance criteria, fallback tables, isolated testing. Use when the user asks for an implementation plan, a testing plan, "plan the implementation", "how should we implement X", "design a plan for X", "make a plan for this feature", "write a plan", is planning a complex/robust feature, or wants a detailed plan before coding.
+description: Design deep, evidence-based implementation and testing plans for complex features and fixes in the "robust plan" style — invariants, route selection, staged rollout, acceptance criteria, fallback tables, isolated testing. Surfaces design conflicts with the existing codebase and resolves them with the user before writing the plan. Use when the user asks for an implementation plan, a testing plan, "plan the implementation", "how should we implement X", "design a plan for X", "make a plan for this feature", "write a plan", is planning a complex/robust feature, or wants a detailed plan before coding.
 ---
 
 # Robust Implementation Planning
@@ -23,6 +23,7 @@ Follow the phases in order. Do not write the plan document before Phase 2 and Ph
 
 - Read every file the feature touches, plus its callers and configuration. Note exact line numbers for every relevant behavior.
 - If the repo has `AGENTS.md` or `CONTEXT.md`, read them first.
+- **Actively hunt for design conflicts** between the requested feature and the existing design. Look for: established patterns or conventions the feature would break; layering or ownership boundaries it would cross; existing abstractions, state, or mechanisms it would duplicate or fight; dependencies that pull the design in a different direction; and similar existing features implemented in a way the request contradicts. Record every conflict with `file:line` evidence on both sides — the conflicting request and the conflicting code. Conflicts are planning input, not surprises to be papered over mid-implementation.
 - Record what the review did NOT establish: unreproduced environments, unverified assumptions, runtime behavior not observed. This becomes the honesty backbone of the plan.
 
 ### Phase 2 — Resolve ambiguity with the user
@@ -34,6 +35,7 @@ Ask the user (via the question tool, options with a recommended default first) w
 - A decision is destructive or hard to reverse.
 - Defaults must be chosen (sizes, limits, on/off, precedence between modes).
 - Something in the codebase or the request is genuinely confusing.
+- **A design conflict was found in Phase 1.** Never resolve it silently and never silently conform the feature to the code or vice versa. Present each conflict with its `file:line` evidence on both sides, and offer the realistic handling options as concrete choices, for example: follow the existing design and adapt the feature to it; extend the existing design to accommodate the feature; isolate the new approach behind a boundary so both coexist; or refactor the existing design first, then build on it. Give a recommended default and the trade-offs of each option. A conflict that materially reshapes the plan must be resolved here — before Route selection.
 
 Do NOT ask when the answer is discoverable from the code, or the choice is trivially reversible. Never silently invent an answer to a question you should have asked.
 
@@ -73,8 +75,8 @@ Section-by-section rules:
 
 - **Scope and evidence.** Files reviewed (with branch), what the review established and explicitly did not. End with one honesty sentence: "This document is an implementation plan, not a claim that it is implemented or tested." (Adjust the wording for the actual situation — but never omit the disclaimer.)
 - **Goals.** Concrete, verifiable bullets. Include preservation goals ("with the toggle off, behavior is byte-for-byte identical to today") alongside new capabilities.
-- **Decisions.** Numbered. Each states the decision and a one-line rationale. Mark which were user-confirmed defaults.
-- **Route selection.** Trade-off table, chosen route, why, why the others were rejected. Short.
+- **Decisions.** Numbered. Each states the decision and a one-line rationale. Mark which were user-confirmed defaults. Every resolved design conflict appears here, stating the conflict, the chosen handling (follow / extend / isolate / refactor-first), and why.
+- **Route selection.** Trade-off table, chosen route, why, why the others were rejected. Short. Candidate routes must respect the conflict-handling decisions; a route that re-opens a resolved conflict is rejected by default.
 - **Target architecture.** A fenced text diagram of the intended lifecycle/flow, then numbered **Invariants** — absolute rules using "Never", "at most one", "Every X must Y". Invariants are where the plan earns its robustness: cover ownership, cleanup, state consistency, bounded terminal states, and untouched-by-default behavior.
 - **Per-concern sections** (numbered, grouped by subsystem or concern — not by file):
   - **Files.** Exact paths this section touches.
@@ -96,6 +98,7 @@ Section-by-section rules:
 Before presenting the plan, verify:
 
 - [ ] Every code claim has a `file:line` citation.
+- [ ] Design conflicts found in Phase 1 were presented to the user and resolved (recorded under Decisions), or listed as explicit open questions.
 - [ ] Every numbered section ends with acceptance criteria.
 - [ ] Invariants cover ownership, cleanup, state consistency, and never-destructive behavior.
 - [ ] The failure table covers crash, cancel, timeout, partial success, and stale state.
